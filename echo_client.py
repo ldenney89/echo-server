@@ -23,7 +23,7 @@ def client(msg, log_buffer=sys.stderr):
     try:
         print('sending "{0}"'.format(msg), file=log_buffer)
         # TODO: send your message to the server here.
-        sock.sendall(msg)
+        sock.sendall(msg.encode('utf-8'))
         # TODO: the server should be sending you back your message as a series
         #       of 16-byte chunks. Accumulate the chunks you get to build the
         #       entire reply from the server. Make sure that you have received
@@ -33,9 +33,10 @@ def client(msg, log_buffer=sys.stderr):
         #       do it. This will help in debugging problems
         while True:
             chunk = sock.recv(16)
-            print('received "{0}"'.format(chunk.decode('utf8')),
+            chunk_str = chunk.decode('utf8')
+            print('received "{0}"'.format(chunk_str),
                   file=log_buffer)
-            received_message += chunk
+            received_message += chunk_str
             if (len(chunk) < 16):
                 break
     except Exception as e:
